@@ -1,7 +1,6 @@
 package rocketmq
 
 import (
-	"fmt"
 	"time"
 )
 
@@ -21,25 +20,55 @@ type Config struct {
 	RetryTimes int
 }
 
-// NewDefaultConfig 创建默认配置
-func NewDefaultConfig(nameServer, groupName string) *Config {
+type ConfigOption func(*Config)
+
+func DefaultConfig() *Config {
 	return &Config{
-		NameServer: nameServer,
-		GroupName:  groupName,
 		Timeout:    3 * time.Second,
 		RetryTimes: 3,
 	}
 }
 
-// Validate 验证配置是否有效
-func (c *Config) Validate() error {
-	if c.NameServer == "" {
-		return fmt.Errorf("name server address cannot be empty")
+// WithNameServer 设置名称服务器
+func WithNameServer(nameServer string) ConfigOption {
+	return func(c *Config) {
+		c.NameServer = nameServer
 	}
-	if c.GroupName == "" {
-		return fmt.Errorf("group name cannot be empty")
+}
+
+// WithGroupName 设置生产者或消费者组名
+func WithGroupName(groupName string) ConfigOption {
+	return func(c *Config) {
+		c.GroupName = groupName
 	}
-	return nil
+}
+
+// WithAccessKey 设置阿里云 RocketMQ 的 AccessKey
+func WithAccessKey(accessKey string) ConfigOption {
+	return func(c *Config) {
+		c.AccessKey = accessKey
+	}
+}
+
+// WithSecretKey 设置阿里云 RocketMQ 的 SecretKey
+func WithSecretKey(secretKey string) ConfigOption {
+	return func(c *Config) {
+		c.SecretKey = secretKey
+	}
+}
+
+// WithTimeout 设置超时时间
+func WithTimeout(timeout time.Duration) ConfigOption {
+	return func(c *Config) {
+		c.Timeout = timeout
+	}
+}
+
+// WithRetryTimes 设置重试次数
+func WithRetryTimes(retryTimes int) ConfigOption {
+	return func(c *Config) {
+		c.RetryTimes = retryTimes
+	}
 }
 
 // Message 消息结构体

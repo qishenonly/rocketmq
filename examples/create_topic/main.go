@@ -10,11 +10,11 @@ import (
 )
 
 func main() {
-	// 创建配置
-	config := rocketmq.NewDefaultConfig("127.0.0.1:9876", "simple_producer_group")
-
 	// 创建生产者
-	p, err := rocketmq.NewProducer(config)
+	p, err := rocketmq.NewProducer(
+		rocketmq.WithNameServer("127.0.0.1:9876"),
+		rocketmq.WithGroupName("simple_test_group"),
+	)
 	if err != nil {
 		log.Fatalf("创建生产者失败: %v", err)
 	}

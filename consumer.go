@@ -32,9 +32,13 @@ type PushConsumer struct {
 }
 
 // NewPushConsumer 创建推模式消费者
-func NewPushConsumer(config *Config) (Consumer, error) {
-	if err := config.Validate(); err != nil {
-		return nil, err
+func NewPushConsumer(opts ...ConfigOption) (Consumer, error) {
+	// 使用默认配置
+	config := DefaultConfig()
+
+	// 应用选项
+	for _, opt := range opts {
+		opt(config)
 	}
 
 	return &PushConsumer{
@@ -132,10 +136,6 @@ type PullConsumer struct {
 
 // NewPullConsumer 创建拉模式消费者
 func NewPullConsumer(config *Config) (Consumer, error) {
-	if err := config.Validate(); err != nil {
-		return nil, err
-	}
-
 	return &PullConsumer{
 		config:  config,
 		started: false,

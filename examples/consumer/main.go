@@ -14,11 +14,11 @@ import (
 )
 
 func main() {
-	// 创建配置
-	config := rocketmq.NewDefaultConfig("127.0.0.1:9876", "simple_consumer_group")
-
 	// 创建消费者
-	c, err := rocketmq.NewPushConsumer(config)
+	c, err := rocketmq.NewPushConsumer(
+		rocketmq.WithNameServer("127.0.0.1:9876"),
+		rocketmq.WithGroupName("simple_test_group"),
+	)
 	if err != nil {
 		log.Fatalf("创建消费者失败: %v", err)
 	}

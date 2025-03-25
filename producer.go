@@ -36,11 +36,11 @@ type DefaultProducer struct {
 }
 
 // NewProducer 创建新的生产者
-func NewProducer(config *Config) (Producer, error) {
-	if err := config.Validate(); err != nil {
-		return nil, err
+func NewProducer(opts ...ConfigOption) (Producer, error) {
+	config := DefaultConfig()
+	for _, opt := range opts {
+		opt(config)
 	}
-
 	return &DefaultProducer{
 		config:  config,
 		started: false,
